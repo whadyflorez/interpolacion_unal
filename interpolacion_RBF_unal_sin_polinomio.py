@@ -59,7 +59,7 @@ fig = plt.figure(figsize=(18, 5))
 ax1 = fig.add_subplot(1, 3, 1, projection='3d')
 ax1.plot_surface(grid_x, grid_y, grid_z_original, cmap='viridis', alpha=0.8)
 ax1.scatter(x_vals, y_vals, z_vals, color='red', s=40)
-ax1.set_title('Función original $f(x,y)$')
+ax1.set_title(r'$f(x,y)=sin(x)+cos(y)$')
 ax1.set_xlabel('x'); ax1.set_ylabel('y'); ax1.set_zlabel('f(x,y)')
 
 # Gráfica 2: Interpolación RBF

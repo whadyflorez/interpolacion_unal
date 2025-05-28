@@ -92,7 +92,7 @@ ax1.scatter(x_vals, y_vals, df_dx_exact(x_vals, y_vals), color='red', s=40)
 ax1.set_title('Derivada exacta $\\partial f/\\partial x$')
 ax1.set_xlabel('x')
 ax1.set_ylabel('y')
-ax1.set_zlabel('df/dx')
+ax1.set_zlabel(r'$\frac{\partial f}{\partial x}$')
 
 # Derivada interpolada
 ax2 = fig.add_subplot(1, 3, 2, projection='3d')
