@@ -1,18 +1,16 @@
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
-# Número de nodos
+ 
 N = 10
 x_nodes = np.linspace(0, 2 * np.pi, N, endpoint=False)
 
-# Función a interpolar
 def f(x):
     return np.sin(x) + 0.5 * np.cos(2 * x)
 
 y_nodes = f(x_nodes)
 
-# --- Interpolación trigonométrica con 10 funciones base explícitas ---
 def phi_0(x): return np.ones_like(x)
 def phi_1(x): return np.cos(x)
 def phi_2(x): return np.sin(x)
@@ -32,46 +30,28 @@ coeffs_trig = np.linalg.solve(A_trig, y_nodes)
 def interpolante_trig(x):
     return sum(coeffs_trig[j] * basis_funcs[j](x) for j in range(N))
 
-# --- Interpolación polinómica con np.polyfit ---
 poly_coeffs = np.polyfit(x_nodes, y_nodes, deg=N-1)
 def interpolante_poly(x):
     return np.polyval(poly_coeffs, x)
 
-# --- Gráfica de comparación ---
-x_plot = np.linspace(0, 2 * np.pi, 400)
-y_true = f(x_plot)
-y_trig = interpolante_trig(x_plot)
-y_poly = interpolante_poly(x_plot)
-
-plt.figure(figsize=(10, 6))
-plt.plot(x_plot, y_true, label='Función original $f(x)$', linewidth=2)
-plt.plot(x_plot, y_trig, '--', label='Interpolación trigonométrica')
-plt.plot(x_plot, y_poly, ':', label='Interpolación polinómica')
-plt.scatter(x_nodes, y_nodes, color='black', label='Nodos', zorder=5)
-plt.title('Comparación: Interpolación trigonométrica vs polinómica (N = 10)')
-plt.xlabel('$x$')
-plt.ylabel('$f(x)$ / aproximación')
-plt.grid(True)
-plt.legend()
-plt.tight_layout()
-plt.show()
-
-# --- Tabla comparativa de valores y errores ---
-x_eval = np.linspace(0, 2 * np.pi, 10, endpoint=False)
+x_eval = np.linspace(0.1, 2 * np.pi - 0.1, 10)
 f_exact = f(x_eval)
 f_trig = interpolante_trig(x_eval)
 f_poly = interpolante_poly(x_eval)
 error_trig = np.abs(f_exact - f_trig)
 error_poly = np.abs(f_exact - f_poly)
 
-df = pd.DataFrame({
-    'x': x_eval,
-    'f(x) exacto': f_exact,
-    'Interp. trigonom.': f_trig,
-    'Interp. polinómica': f_poly,
-    'Error trig.': error_trig,
-    'Error polin.': error_poly
-})
-
-# Mostrar tabla en consola o exportar si se desea
-print(df.to_string(index=False))
+x_plot = np.linspace(0, 2 * np.pi, 400)
+plt.figure(figsize=(10, 6))
+plt.plot(x_plot, f(x_plot), label='Función original $f(x)$', linewidth=2)
+plt.plot(x_plot, interpolante_trig(x_plot), '--', label='Interpolación trigonométrica')
+plt.plot(x_plot, interpolante_poly(x_plot), ':', label='Interpolación polinómica')
+plt.scatter(x_nodes, y_nodes, color='black', label='Nodos de interpolación', zorder=5)
+plt.scatter(x_eval, f_exact, color='red', label='Puntos de evaluación', zorder=5)
+plt.xlabel('$x$')
+plt.ylabel('$f(x)$ / Aproximación')
+plt.title('Comparación: Interpolación trigonométrica vs polinómica (N = 10)')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
+plt.show()
